@@ -6,7 +6,6 @@ import numpy as np
 from torch.autograd import Variable
 from pytorch_msssim import ssim, ms_ssim
 from PIL import Image
-from MS_SSIM_L1_loss import MS_SSIM_L1_LOSS
 import matplotlib.pyplot as plt
 import datetime
 
@@ -105,91 +104,6 @@ class RC(nn.Module):
         else:
             return h
 
-   ## ?????????????pad???????????????activated?????????????relu?
-# class InceptionModule(nn.Module):
-#     def __init__(self, in_nc, out_nc, bn='BatchNorm'):
-#         super(InceptionModule, self).__init__()
-#         self.conv1x1 = nn.Conv2d(in_nc, out_nc//4, kernel_size=1, stride=1, padding=0, bias=False)
-#         self.norm1x1 = nn.BatchNorm2d(out_nc//4)
-#
-#         self.conv1x1_2 = nn.Conv2d(in_nc, out_nc//4, kernel_size=1, stride=1, padding=0, bias=False)
-#         self.conv3x3 = nn.Conv2d(out_nc//4, out_nc//4, kernel_size=3, stride=1, padding=1, bias=False)
-#         self.norm3x3 = nn.BatchNorm2d(out_nc//4)  # nn.Sequential()  #
-#
-#         self.conv1x1_3 = nn.Conv2d(in_nc, out_nc//4, kernel_size=1, stride=1, padding=0, bias=False)
-#         self.conv5x5 = nn.Conv2d(out_nc//4, out_nc//4, kernel_size=5, stride=1, padding=2, bias=False)
-#         self.norm5x5 = nn.BatchNorm2d(out_nc//4)
-#
-#         self.maxpooling = nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
-#         self.conv1x1_4 = nn.Conv2d(in_nc, out_nc//4, kernel_size=1, stride=1, padding=0, bias=False)
-#         self.normpooling = nn.BatchNorm2d(out_nc//4)
-#
-#         self.conv1x1_5 = nn.Conv2d(in_nc, out_nc, kernel_size=1, stride=1, padding=0, bias=False)
-#         self.relu = nn.LeakyReLU()  # nn.ReLU(True)
-#
-#     def forward(self, x):
-#         out1x1 = self.relu(self.norm1x1(self.conv1x1(x)))
-#         out3x3 = self.relu(self.conv1x1_2(x))
-#         out3x3 = self.relu(self.norm3x3(self.conv3x3(out3x3)))
-#         out5x5 = self.relu(self.conv1x1_3(x))
-#         out5x5 = self.relu(self.norm5x5(self.conv5x5(out5x5)))
-#         outmaxpooling = self.maxpooling(x)
-#         outmaxpooling = self.relu(self.norm5x5(self.conv1x1_4(outmaxpooling)))
-#
-#         out = torch.cat([out1x1, out3x3, out5x5, outmaxpooling], dim=1)
-#         residual = self.conv1x1_5(x)
-#         out = out + residual
-#         return out
-# # 用于提取秘密图像的特征secret features extract
-# class Sec_fea_ext(nn.Module):
-#     def __init__(self):
-#         super().__init__()
-#         self.net_1 = nn.Conv2d(in_channels=3,out_channels=32,kernel_size=3,stride=2,padding=1)
-#         #self.bn_1 = nn.BatchNorm2d(32)
-#         self.block1 = InceptionModule(32,64)
-#         self.active_1 = nn.ReLU()
-#         self.active_2 = nn.Sigmoid()
-#         self.block2 = InceptionModule(64,128)
-#         self.net_2 = nn.Conv2d(in_channels=128,out_channels=128,kernel_size=3,stride=2,padding=1)
-#
-#         self.net_3 = InceptionModule(128, 256)
-#         #self.net_3 = nn.Conv2d(in_channels=128,out_channels=256,kernel_size=3,stride=2,padding=1)
-#         self.net_3_3 =nn.Conv2d(256,256,kernel_size=3,stride=2,padding=1)
-#         #
-#         self.tanh = nn.Tanh()
-#
-#         for m in self.modules():
-#             if isinstance(m, nn.Conv2d):
-#                 m.weight.data.normal_(0.0, 0.01)
-#                 if m.bias is not None:
-#                     m.bias.data.zero_()
-#     def forward(self,input):
-#         out_list = []
-#         # 该工作目前停留在这里，灰度图像是三通道的，需要修改一下
-#         out_list.append(input)  #1,1,256,256
-#         out_1 = self.net_1(input)
-#         out_1_2 = self.block1(out_1)
-#         out_1_2 = self.active_1(out_1_2)
-#         #print(out_1_2.shape)  # 1,64,128,128
-#         out_list.append(out_1_2)
-#
-#         out_2_1 = self.block2(out_1_2)
-#         out_2 = self.net_2(out_2_1)
-#         out_2_2 = self.active_1(out_2)
-#
-#         out_list.append(out_2_2)
-#         #print(out_2_2.shape)   #1,128,64,64
-#         out_3 = self.net_3(out_2_2)
-#         out_3_3 =self.net_3_3(out_3)
-#         #out_3_3 = self.active_2(out_3)
-#         out_3_1 = self.tanh(out_3_3)
-#         out_list.append(out_3_3)
-#         #print(out_3.shape)   #1,256,32,32
-#
-#         return out_list
-# 用于从stego image中提取秘密图像
-# 在服务器上这个地方改了一下，最大通道数只到256
-# 服务器中还在每一层里加入了BN层加速训练
 class Extract(nn.Module):
     def __init__(self):
         super().__init__()
