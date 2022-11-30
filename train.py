@@ -25,7 +25,7 @@ def weight_init(m):
 
 def main():
     time_start = datetime.datetime.now()
-    parser = argparse.ArgumentParser(description='AdaIN Style Transfer by Pytorch')
+    parser = argparse.ArgumentParser(description='Hiding information based on NST by Pytorch')
     parser.add_argument('--batch_size', '-b', type=int, default=2,
                         help='Number of images in each mini-batch')
     parser.add_argument('--epoch', '-e', type=int, default=100,
@@ -127,7 +127,7 @@ def main():
                 optimizer_decder.step()
                 optimizer_sec_fea.step()
                 #lr_sch.step()
-                #print("第%d个epoch的学习率:%f" %(e,optimizer_extra.param_groups[0]['lr']))
+                #print("碌脷%d赂枚epoch碌脛脩搂脧掳脗脢:%f" %(e,optimizer_extra.param_groups[0]['lr']))
 
             else:
                 optimizer_extra.zero_grad()
