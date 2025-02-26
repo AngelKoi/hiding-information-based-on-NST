@@ -32,6 +32,6 @@ ukiyoe2photo dateset [Wikiart](https://www.kaggle.com/c/painter-by-numbers) (as 
 
 1. Prepare your content image and style image. I provide some in the `content` and `style` and you can try to use them easily.
 
-2.   ```python
+2. ```python
    python test.py
    
